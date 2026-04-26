@@ -299,6 +299,17 @@ Exposes the raw `@kubernetes/client-node` clients (`apps`, `core`, `rbac`,
 `KubeConfig`. Reach for it only when the focused services don't cover your
 case.
 
+## Examples
+
+Three runnable examples in [`examples/`](./examples) showing concrete
+manifests you can apply, patch and orchestrate from your backend:
+
+| Example | What it shows |
+|---|---|
+| [`tenant-bundle/`](./examples/tenant-bundle/) | Full per-tenant bundle (Namespace, ConfigMap, Secret, Deployment, Service, PDB, Ingress, Certificate) |
+| [`mongo-replicaset/`](./examples/mongo-replicaset/) | StatefulSet + `pods.execCommand` to initiate `rs.initiate(...)` programmatically (no bash) |
+| [`local-demo/`](./examples/local-demo/) | End-to-end demo against a `kind` cluster — exercises every service in 8 steps |
+
 ## Roadmap (v0.2+)
 
 - Server-side apply (Kubernetes 1.22+) instead of replace
