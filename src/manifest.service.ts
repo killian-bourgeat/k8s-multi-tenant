@@ -82,11 +82,11 @@ export class K8sManifestService {
       case 'Role':
         await this.k8s.rbac.createNamespacedRole(ns, resource); return;
       case 'RoleBinding':
-        await this.k8s.rbac.createNamespacedRoleBinding(ns, resource); return;
+        await this.k8s.rbac.createNamespacedRoleBinding(ns, resource as any); return;
       case 'ServiceAccount':
         await this.k8s.core.createNamespacedServiceAccount(ns, resource); return;
       case 'ClusterRoleBinding':
-        await this.k8s.rbac.createClusterRoleBinding(resource); return;
+        await this.k8s.rbac.createClusterRoleBinding(resource as any); return;
       case 'HorizontalPodAutoscaler':
         await this.k8s.autoscaling.createNamespacedHorizontalPodAutoscaler(ns, resource); return;
       case 'CronJob':
@@ -125,11 +125,11 @@ export class K8sManifestService {
       case 'Role':
         await this.k8s.rbac.replaceNamespacedRole(name, ns, resource); return;
       case 'RoleBinding':
-        await this.k8s.rbac.replaceNamespacedRoleBinding(name, ns, resource); return;
+        await this.k8s.rbac.replaceNamespacedRoleBinding(name, ns, resource as any); return;
       case 'ServiceAccount':
         await this.k8s.core.replaceNamespacedServiceAccount(name, ns, resource); return;
       case 'ClusterRoleBinding':
-        await this.k8s.rbac.replaceClusterRoleBinding(name, resource); return;
+        await this.k8s.rbac.replaceClusterRoleBinding(name, resource as any); return;
       case 'HorizontalPodAutoscaler':
         await this.k8s.autoscaling.replaceNamespacedHorizontalPodAutoscaler(name, ns, resource); return;
       case 'CronJob':
