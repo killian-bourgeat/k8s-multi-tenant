@@ -5,6 +5,7 @@ import { K8sManifestService } from './manifest.service.js';
 import { K8sDeploymentService } from './deployment.service.js';
 import { K8sCertificateService } from './certificate.service.js';
 import { K8sIngressService } from './ingress.service.js';
+import { K8sPodService } from './pod.service.js';
 import { K8sTemplateEngine } from './template-engine.js';
 
 const PROVIDERS = [
@@ -13,6 +14,7 @@ const PROVIDERS = [
   K8sDeploymentService,
   K8sCertificateService,
   K8sIngressService,
+  K8sPodService,
   K8sTemplateEngine,
 ];
 

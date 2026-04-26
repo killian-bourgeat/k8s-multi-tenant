@@ -4,6 +4,13 @@ export { K8sManifestService } from './manifest.service.js';
 export { K8sDeploymentService } from './deployment.service.js';
 export { K8sCertificateService } from './certificate.service.js';
 export { K8sIngressService } from './ingress.service.js';
+export {
+  K8sPodService,
+  type ExecOptions,
+  type ExecResult,
+  type LogReadOptions,
+  type LogStreamOptions,
+} from './pod.service.js';
 export { K8sTemplateEngine } from './template-engine.js';
 export {
   K8S_MODULE_OPTIONS,
