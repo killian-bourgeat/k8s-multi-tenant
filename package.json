@@ -1,0 +1,49 @@
+{
+  "name": "k8s-multitenants-saas",
+  "version": "0.1.0",
+  "description": "Programmatic Kubernetes for multi-tenant SaaS — apply manifests, wait for resources, manage tenant ingresses and TLS certificates from a NestJS backend.",
+  "author": "Killian Bourgeat",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "lint": "eslint \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [
+    "kubernetes",
+    "k8s",
+    "saas",
+    "multi-tenant",
+    "nestjs",
+    "ingress",
+    "cert-manager",
+    "provisioning"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "rxjs": "^7.8.0"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^0.22.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "rxjs": "^7.8.1",
+    "typescript": "^5.7.0"
+  }
+}
