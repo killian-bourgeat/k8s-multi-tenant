@@ -299,12 +299,10 @@ Exposes the raw `@kubernetes/client-node` clients (`apps`, `core`, `rbac`,
 `KubeConfig`. Reach for it only when the focused services don't cover your
 case.
 
-## Roadmap (v0.2+)
+## Roadmap
 
-- Server-side apply (Kubernetes 1.22+) instead of replace
-- Retry/backoff on transient API errors
+- Server-side apply (Kubernetes 1.22+) instead of `create + replace`
 - Generic `waitFor(predicate)` helper
-- Kubernetes watches (push) instead of polling
 - More cert-manager helpers (Issuer, ClusterIssuer)
 - Tests
 
