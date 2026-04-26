@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as k8s from '@kubernetes/client-node';
 import { K8S_MODULE_OPTIONS, type K8sModuleOptions } from './types.js';
+import { withRetry, type RetryOptions } from './retry.js';
 
 /**
  * Internal client owning the KubeConfig and the per-API-group clients.
@@ -24,6 +25,7 @@ export class K8sCoreClient {
 
   readonly defaultNamespace: string;
   readonly defaultPollMs: number;
+  readonly retryOptions: RetryOptions;
 
   constructor(
     @Inject(K8S_MODULE_OPTIONS)
@@ -31,6 +33,15 @@ export class K8sCoreClient {
   ) {
     this.defaultNamespace = options.defaultNamespace ?? 'default';
     this.defaultPollMs = options.pollIntervalMs ?? 3000;
+    this.retryOptions = options.retry ?? {};
+  }
+
+  /**
+   * Run `fn` with the module's retry policy (exponential backoff + jitter
+   * on 5xx, 429, and network errors). Used by all imperative services.
+   */
+  withRetry<T>(fn: () => Promise<T>): Promise<T> {
+    return withRetry(fn, this.retryOptions);
   }
 
   private ensureInitialized(): void {

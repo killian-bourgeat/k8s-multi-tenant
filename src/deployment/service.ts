@@ -11,16 +11,20 @@ export class K8sDeploymentService {
 
   async scale(name: string, replicas: number, namespace?: string): Promise<void> {
     const ns = this.k8s.resolveNamespace(namespace);
-    const res = await this.k8s.apps.readNamespacedDeployment(name, ns);
-    const deployment = res.body;
-    deployment.spec!.replicas = replicas;
-    await this.k8s.apps.replaceNamespacedDeployment(name, ns, deployment);
+    await this.k8s.withRetry(async () => {
+      const res = await this.k8s.apps.readNamespacedDeployment(name, ns);
+      const deployment = res.body;
+      deployment.spec!.replicas = replicas;
+      await this.k8s.apps.replaceNamespacedDeployment(name, ns, deployment);
+    });
   }
 
   async getReplicas(name: string, namespace?: string): Promise<number> {
     const ns = this.k8s.resolveNamespace(namespace);
-    const res = await this.k8s.apps.readNamespacedDeployment(name, ns);
-    return res.body.spec?.replicas ?? 0;
+    return this.k8s.withRetry(async () => {
+      const res = await this.k8s.apps.readNamespacedDeployment(name, ns);
+      return res.body.spec?.replicas ?? 0;
+    });
   }
 
   /**

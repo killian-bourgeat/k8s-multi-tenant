@@ -11,3 +11,4 @@ export {
   type WaitOptions,
   type IngressHostUpdate,
 } from './types.js';
+export { withRetry, isRetryable, type RetryOptions } from './retry.js';

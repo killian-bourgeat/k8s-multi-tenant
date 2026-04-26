@@ -32,17 +32,19 @@ export class K8sIngressService {
       });
     }
 
-    await this.k8s.custom.patchNamespacedCustomObject(
-      NETWORKING_API.group,
-      NETWORKING_API.version,
-      ns,
-      NETWORKING_API.plural.ingresses,
-      update.name,
-      patch,
-      undefined,
-      undefined,
-      undefined,
-      { headers: { 'Content-Type': JSON_PATCH_CONTENT_TYPE } },
+    await this.k8s.withRetry(() =>
+      this.k8s.custom.patchNamespacedCustomObject(
+        NETWORKING_API.group,
+        NETWORKING_API.version,
+        ns,
+        NETWORKING_API.plural.ingresses,
+        update.name,
+        patch,
+        undefined,
+        undefined,
+        undefined,
+        { headers: { 'Content-Type': JSON_PATCH_CONTENT_TYPE } },
+      ),
     );
   }
 }

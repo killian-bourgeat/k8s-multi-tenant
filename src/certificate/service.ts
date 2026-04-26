@@ -48,12 +48,14 @@ export class K8sCertificateService {
   async delete(name: string, namespace?: string): Promise<void> {
     const ns = this.k8s.resolveNamespace(namespace);
     try {
-      await this.k8s.custom.deleteNamespacedCustomObject(
-        CERT_MANAGER_API.group,
-        CERT_MANAGER_API.version,
-        ns,
-        CERT_MANAGER_API.plural.certificates,
-        name,
+      await this.k8s.withRetry(() =>
+        this.k8s.custom.deleteNamespacedCustomObject(
+          CERT_MANAGER_API.group,
+          CERT_MANAGER_API.version,
+          ns,
+          CERT_MANAGER_API.plural.certificates,
+          name,
+        ),
       );
     } catch (err: any) {
       if (!this.k8s.isNotFoundError(err)) throw err;

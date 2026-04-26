@@ -1,4 +1,5 @@
 import type * as k8s from '@kubernetes/client-node';
+import type { RetryOptions } from './retry.js';
 
 export type K8sManifest = Record<string, any>;
 
@@ -20,6 +21,9 @@ export interface K8sModuleOptions {
 
   /** Default polling interval in milliseconds for `waitFor*` operations. @default 3000 */
   pollIntervalMs?: number;
+
+  /** Retry policy applied to imperative operations (apply, delete, scale, patch). */
+  retry?: RetryOptions;
 }
 
 export interface WaitOptions {

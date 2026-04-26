@@ -32,11 +32,11 @@ export class K8sManifestService {
 
   private async applyOne(resource: K8sManifest, namespace: string): Promise<void> {
     try {
-      await createByKind(this.k8s, resource, namespace);
+      await this.k8s.withRetry(() => createByKind(this.k8s, resource, namespace));
     } catch (err: any) {
       if (this.k8s.isAlreadyExistsError(err)) {
         this.logger.debug(`${resource.kind}/${resource.metadata?.name} exists, replacing.`);
-        await replaceByKind(this.k8s, resource, namespace);
+        await this.k8s.withRetry(() => replaceByKind(this.k8s, resource, namespace));
       } else {
         throw err;
       }
@@ -47,7 +47,7 @@ export class K8sManifestService {
     const kind = resource.kind as string;
     const name = resource.metadata?.name as string;
     try {
-      await deleteByKind(this.k8s, kind, name, namespace);
+      await this.k8s.withRetry(() => deleteByKind(this.k8s, kind, name, namespace));
     } catch (err: any) {
       if (this.k8s.isNotFoundError(err)) {
         this.logger.debug(`${kind}/${name} not found, skipping delete.`);

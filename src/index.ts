@@ -13,6 +13,7 @@ export {
   CERT_MANAGER_API,
   JSON_PATCH_CONTENT_TYPE,
 } from './core/constants.js';
+export { withRetry, isRetryable, type RetryOptions } from './core/retry.js';
 
 export { K8sManifestService } from './manifest/service.js';
 export { K8sDeploymentService } from './deployment/service.js';
