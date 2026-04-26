@@ -11,8 +11,6 @@ import { K8S_MODULE_OPTIONS, type K8sModuleOptions } from './types.js';
  */
 @Injectable()
 export class K8sCoreClient {
-  private readonly logger = new Logger(K8sCoreClient.name);
-
   private kc!: k8s.KubeConfig;
   private _apps!: k8s.AppsV1Api;
   private _core!: k8s.CoreV1Api;

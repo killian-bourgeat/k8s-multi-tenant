@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { K8sCoreClient } from './k8s-core.client.js';
+import { NETWORKING_API, JSON_PATCH_CONTENT_TYPE } from './constants.js';
 import type { IngressHostUpdate } from './types.js';
 
 /**
@@ -34,16 +35,16 @@ export class K8sIngressService {
     }
 
     await this.k8s.custom.patchNamespacedCustomObject(
-      'networking.k8s.io',
-      'v1',
+      NETWORKING_API.group,
+      NETWORKING_API.version,
       ns,
-      'ingresses',
+      NETWORKING_API.plural.ingresses,
       update.name,
       patch,
       undefined,
       undefined,
       undefined,
-      { headers: { 'Content-Type': 'application/json-patch+json' } },
+      { headers: { 'Content-Type': JSON_PATCH_CONTENT_TYPE } },
     );
   }
 }

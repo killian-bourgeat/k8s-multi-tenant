@@ -1,10 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { K8sCoreClient } from './k8s-core.client.js';
+import { CERT_MANAGER_API } from './constants.js';
 import type { WaitOptions } from './types.js';
-
-const CERT_MANAGER_GROUP = 'cert-manager.io';
-const CERT_MANAGER_VERSION = 'v1';
-const CERT_MANAGER_PLURAL = 'certificates';
 
 /**
  * Operations on cert-manager `Certificate` resources.
@@ -27,10 +24,10 @@ export class K8sCertificateService {
     while (Date.now() - start < timeoutMs) {
       try {
         const cert = await this.k8s.custom.getNamespacedCustomObject(
-          CERT_MANAGER_GROUP,
-          CERT_MANAGER_VERSION,
+          CERT_MANAGER_API.group,
+          CERT_MANAGER_API.version,
           ns,
-          CERT_MANAGER_PLURAL,
+          CERT_MANAGER_API.plural.certificates,
           name,
         );
         const conditions = (cert.body as any).status?.conditions ?? [];
@@ -54,10 +51,10 @@ export class K8sCertificateService {
     const ns = this.k8s.resolveNamespace(namespace);
     try {
       await this.k8s.custom.deleteNamespacedCustomObject(
-        CERT_MANAGER_GROUP,
-        CERT_MANAGER_VERSION,
+        CERT_MANAGER_API.group,
+        CERT_MANAGER_API.version,
         ns,
-        CERT_MANAGER_PLURAL,
+        CERT_MANAGER_API.plural.certificates,
         name,
       );
     } catch (err: any) {

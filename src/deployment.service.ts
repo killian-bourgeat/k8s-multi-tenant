@@ -7,8 +7,6 @@ import type { WaitOptions } from './types.js';
  */
 @Injectable()
 export class K8sDeploymentService {
-  private readonly logger = new Logger(K8sDeploymentService.name);
-
   constructor(private readonly k8s: K8sCoreClient) {}
 
   async scale(name: string, replicas: number, namespace?: string): Promise<void> {
