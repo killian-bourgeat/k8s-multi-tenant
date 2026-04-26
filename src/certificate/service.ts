@@ -18,7 +18,6 @@ export class K8sCertificateService {
     const ns = this.k8s.resolveNamespace(options.namespace);
     const timeoutMs = options.timeoutMs ?? 10 * 60 * 1000;
 
-    // Initial read — short-circuits if the cert is already issued.
     try {
       const cert = await this.k8s.custom.getNamespacedCustomObject(
         CERT_MANAGER_API.group,
