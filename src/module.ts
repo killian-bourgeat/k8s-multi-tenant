@@ -1,12 +1,12 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { K8S_MODULE_OPTIONS, type K8sModuleOptions } from './types.js';
-import { K8sCoreClient } from './k8s-core.client.js';
-import { K8sManifestService } from './manifest.service.js';
-import { K8sDeploymentService } from './deployment.service.js';
-import { K8sCertificateService } from './certificate.service.js';
-import { K8sIngressService } from './ingress.service.js';
-import { K8sPodService } from './pod.service.js';
-import { K8sTemplateEngine } from './template-engine.js';
+import { K8S_MODULE_OPTIONS, type K8sModuleOptions } from './core/types.js';
+import { K8sCoreClient } from './core/client.js';
+import { K8sManifestService } from './manifest/service.js';
+import { K8sDeploymentService } from './deployment/service.js';
+import { K8sCertificateService } from './certificate/service.js';
+import { K8sIngressService } from './ingress/service.js';
+import { K8sPodService } from './pod/service.js';
+import { K8sTemplateEngine } from './template/engine.js';
 
 const PROVIDERS = [
   K8sCoreClient,

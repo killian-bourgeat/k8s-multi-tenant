@@ -12,21 +12,13 @@ export interface K8sModuleOptions {
    */
   kubeconfig?: 'auto' | 'in-cluster' | 'default' | 'custom';
 
-  /**
-   * Pre-configured KubeConfig instance. Required when `kubeconfig` is `custom`.
-   */
+  /** Pre-configured KubeConfig instance. Required when `kubeconfig` is `custom`. */
   customKubeconfig?: k8s.KubeConfig;
 
-  /**
-   * Default namespace used when an operation does not specify one.
-   * @default 'default'
-   */
+  /** Default namespace used when an operation does not specify one. @default 'default' */
   defaultNamespace?: string;
 
-  /**
-   * Default polling interval in milliseconds for `waitFor*` operations.
-   * @default 3000
-   */
+  /** Default polling interval in milliseconds for `waitFor*` operations. @default 3000 */
   pollIntervalMs?: number;
 }
 

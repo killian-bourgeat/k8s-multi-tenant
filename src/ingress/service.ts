@@ -1,7 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { K8sCoreClient } from './k8s-core.client.js';
-import { NETWORKING_API, JSON_PATCH_CONTENT_TYPE } from './constants.js';
-import type { IngressHostUpdate } from './types.js';
+import { Injectable } from '@nestjs/common';
+import { K8sCoreClient } from '../core/client.js';
+import { NETWORKING_API, JSON_PATCH_CONTENT_TYPE } from '../core/constants.js';
+import type { IngressHostUpdate } from '../core/types.js';
 
 /**
  * Operations on Ingress resources, focused on the multi-tenant SaaS use
@@ -10,8 +10,6 @@ import type { IngressHostUpdate } from './types.js';
  */
 @Injectable()
 export class K8sIngressService {
-  private readonly logger = new Logger(K8sIngressService.name);
-
   constructor(private readonly k8s: K8sCoreClient) {}
 
   /**

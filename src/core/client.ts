@@ -1,13 +1,13 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as k8s from '@kubernetes/client-node';
 import { K8S_MODULE_OPTIONS, type K8sModuleOptions } from './types.js';
 
 /**
  * Internal client owning the KubeConfig and the per-API-group clients.
  *
- * Other services (manifest, deployment, certificate, ingress) inject this
- * to access the raw `@kubernetes/client-node` clients, while keeping their
- * own API surface focused on a single concern.
+ * Other services (manifest, deployment, certificate, ingress, pod) inject
+ * this to access the raw `@kubernetes/client-node` clients while keeping
+ * their own API surface focused on a single concern.
  */
 @Injectable()
 export class K8sCoreClient {
@@ -77,39 +77,14 @@ export class K8sCoreClient {
     this.ensureInitialized();
     return this.kc;
   }
-
-  get apps(): k8s.AppsV1Api {
-    this.ensureInitialized();
-    return this._apps;
-  }
-  get core(): k8s.CoreV1Api {
-    this.ensureInitialized();
-    return this._core;
-  }
-  get rbac(): k8s.RbacAuthorizationV1Api {
-    this.ensureInitialized();
-    return this._rbac;
-  }
-  get custom(): k8s.CustomObjectsApi {
-    this.ensureInitialized();
-    return this._custom;
-  }
-  get networking(): k8s.NetworkingV1Api {
-    this.ensureInitialized();
-    return this._networking;
-  }
-  get autoscaling(): k8s.AutoscalingV2Api {
-    this.ensureInitialized();
-    return this._autoscaling;
-  }
-  get batch(): k8s.BatchV1Api {
-    this.ensureInitialized();
-    return this._batch;
-  }
-  get policy(): k8s.PolicyV1Api {
-    this.ensureInitialized();
-    return this._policy;
-  }
+  get apps(): k8s.AppsV1Api { this.ensureInitialized(); return this._apps; }
+  get core(): k8s.CoreV1Api { this.ensureInitialized(); return this._core; }
+  get rbac(): k8s.RbacAuthorizationV1Api { this.ensureInitialized(); return this._rbac; }
+  get custom(): k8s.CustomObjectsApi { this.ensureInitialized(); return this._custom; }
+  get networking(): k8s.NetworkingV1Api { this.ensureInitialized(); return this._networking; }
+  get autoscaling(): k8s.AutoscalingV2Api { this.ensureInitialized(); return this._autoscaling; }
+  get batch(): k8s.BatchV1Api { this.ensureInitialized(); return this._batch; }
+  get policy(): k8s.PolicyV1Api { this.ensureInitialized(); return this._policy; }
 
   resolveNamespace(ns?: string): string {
     return ns ?? this.defaultNamespace;

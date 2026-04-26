@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as yaml from 'js-yaml';
-import type { K8sManifest } from './types.js';
+import type { K8sManifest } from '../core/types.js';
 
 /**
  * Lightweight YAML template engine for Kubernetes manifests.
@@ -20,9 +20,7 @@ export class K8sTemplateEngine {
     return yaml.loadAll(rendered) as K8sManifest[];
   }
 
-  /**
-   * Substitute `${VAR}` placeholders in a string without parsing it as YAML.
-   */
+  /** Substitute `${VAR}` placeholders in a string without parsing it as YAML. */
   substitute(template: string, variables: Record<string, string>): string {
     let output = template;
     for (const [key, value] of Object.entries(variables)) {

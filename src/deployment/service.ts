@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { K8sCoreClient } from './k8s-core.client.js';
-import type { WaitOptions } from './types.js';
+import { Injectable } from '@nestjs/common';
+import { K8sCoreClient } from '../core/client.js';
+import type { WaitOptions } from '../core/types.js';
 
 /**
  * Operations on Deployments: scaling and readiness.

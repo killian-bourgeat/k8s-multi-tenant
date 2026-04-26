@@ -1,7 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { K8sCoreClient } from './k8s-core.client.js';
-import { CERT_MANAGER_API } from './constants.js';
-import type { WaitOptions } from './types.js';
+import { Injectable } from '@nestjs/common';
+import { K8sCoreClient } from '../core/client.js';
+import { CERT_MANAGER_API } from '../core/constants.js';
+import type { WaitOptions } from '../core/types.js';
 
 /**
  * Operations on cert-manager `Certificate` resources.
@@ -11,8 +11,6 @@ import type { WaitOptions } from './types.js';
  */
 @Injectable()
 export class K8sCertificateService {
-  private readonly logger = new Logger(K8sCertificateService.name);
-
   constructor(private readonly k8s: K8sCoreClient) {}
 
   async waitForReady(name: string, options: WaitOptions = {}): Promise<void> {
