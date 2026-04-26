@@ -19,9 +19,6 @@ export interface K8sModuleOptions {
   /** Default namespace used when an operation does not specify one. @default 'default' */
   defaultNamespace?: string;
 
-  /** Default polling interval in milliseconds for `waitFor*` operations. @default 3000 */
-  pollIntervalMs?: number;
-
   /** Retry policy applied to imperative operations (apply, delete, scale, patch). */
   retry?: RetryOptions;
 }
@@ -29,8 +26,6 @@ export interface K8sModuleOptions {
 export interface WaitOptions {
   /** Maximum time to wait, in milliseconds. */
   timeoutMs?: number;
-  /** Polling interval in milliseconds. Overrides module default. */
-  pollIntervalMs?: number;
   /** Optional namespace override. */
   namespace?: string;
 }

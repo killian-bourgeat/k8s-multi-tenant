@@ -24,7 +24,6 @@ export class K8sCoreClient {
   private initialized = false;
 
   readonly defaultNamespace: string;
-  readonly defaultPollMs: number;
   readonly retryOptions: RetryOptions;
 
   constructor(
@@ -32,7 +31,6 @@ export class K8sCoreClient {
     private readonly options: K8sModuleOptions,
   ) {
     this.defaultNamespace = options.defaultNamespace ?? 'default';
-    this.defaultPollMs = options.pollIntervalMs ?? 3000;
     this.retryOptions = options.retry ?? {};
   }
 
@@ -107,9 +105,5 @@ export class K8sCoreClient {
 
   isNotFoundError(err: any): boolean {
     return err?.response?.statusCode === 404 || err?.statusCode === 404;
-  }
-
-  sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

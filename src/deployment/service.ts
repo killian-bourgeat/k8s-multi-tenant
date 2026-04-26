@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { Watch } from '@kubernetes/client-node';
 import { K8sCoreClient } from '../core/client.js';
 import type { WaitOptions } from '../core/types.js';
 
 /**
  * Operations on Deployments: scaling and readiness.
+ *
+ * `waitForReady` uses the Kubernetes watch API on the Deployment itself
+ * (not its pods) and resolves as soon as `status.readyReplicas === spec.replicas`.
  */
 @Injectable()
 export class K8sDeploymentService {
@@ -27,37 +31,63 @@ export class K8sDeploymentService {
     });
   }
 
-  /**
-   * Poll until all pods labeled `app=<name>` are in `Running` phase AND
-   * have a `Ready=True` condition.
-   */
   async waitForReady(name: string, options: WaitOptions = {}): Promise<void> {
     const ns = this.k8s.resolveNamespace(options.namespace);
     const timeoutMs = options.timeoutMs ?? 5 * 60 * 1000;
-    const pollMs = options.pollIntervalMs ?? this.k8s.defaultPollMs;
-    const start = Date.now();
 
-    while (Date.now() - start < timeoutMs) {
-      const podsRes = await this.k8s.core.listNamespacedPod(ns);
-      const pods = podsRes.body.items.filter(
-        (p) => p.metadata?.labels?.['app'] === name,
-      );
-
-      if (pods.length > 0) {
-        const allRunning = pods.every((p) => p.status?.phase === 'Running');
-        const allReady = pods.every((p) =>
-          p.status?.conditions?.some(
-            (c) => c.type === 'Ready' && c.status === 'True',
-          ),
-        );
-        if (allRunning && allReady) return;
-      }
-
-      await this.k8s.sleep(pollMs);
+    // Initial read — short-circuits if the deployment is already ready.
+    try {
+      const res = await this.k8s.apps.readNamespacedDeployment(name, ns);
+      if (isDeploymentReady(res.body)) return;
+    } catch (err: any) {
+      if (!this.k8s.isNotFoundError(err)) throw err;
     }
 
-    throw new Error(
-      `Timeout: deployment "${name}" pods not ready after ${timeoutMs}ms`,
-    );
+    await new Promise<void>((resolve, reject) => {
+      const watch = new Watch(this.k8s.kubeConfig);
+      let req: any;
+      let settled = false;
+
+      const settle = (fn: () => void) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        try { req?.abort?.(); } catch { /* ignore */ }
+        fn();
+      };
+
+      const timer = setTimeout(
+        () =>
+          settle(() =>
+            reject(
+              new Error(
+                `Timeout: deployment "${name}" not ready after ${timeoutMs}ms`,
+              ),
+            ),
+          ),
+        timeoutMs,
+      );
+
+      watch
+        .watch(
+          `/apis/apps/v1/namespaces/${ns}/deployments`,
+          { fieldSelector: `metadata.name=${name}` },
+          (_phase: string, obj: any) => {
+            if (isDeploymentReady(obj)) settle(() => resolve());
+          },
+          (err) => {
+            if (settled) return;
+            settle(() => reject(err ?? new Error('Watch ended unexpectedly')));
+          },
+        )
+        .then((r) => { req = r; })
+        .catch((err) => settle(() => reject(err)));
+    });
   }
+}
+
+function isDeploymentReady(dep: any): boolean {
+  const desired = dep?.spec?.replicas ?? 0;
+  const ready = dep?.status?.readyReplicas ?? 0;
+  return desired > 0 && ready === desired;
 }
